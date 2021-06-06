@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="WeekdayToggle" parent="android:Widget.Material.Light.Button.Toggle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">0.9</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/drawable_background_toggle</item>
+    </style>
+    <style name="WeekdaySpace">
+        <item name="android:layout_weight">0.1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+    </style>
+</resources>
