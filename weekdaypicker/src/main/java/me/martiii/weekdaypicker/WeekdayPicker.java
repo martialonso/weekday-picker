@@ -44,14 +44,8 @@ public class WeekdayPicker extends LinearLayout {
 
         setDayMap(MONDAY_FIRST_DAY_MAP);
 
-        Arrays.stream(Weekday.values()).map(dayMap).forEach(entry -> {
-            setToggleText(entry.getKey(), entry.getValue().textResource);
-            setToggleSelected(entry.getKey());
-        });
-    }
-
-    private void setToggleSelected(ToggleButton button) {
-        button.setChecked(true);
+        Arrays.stream(Weekday.values()).map(dayMap).forEach(entry ->
+                setToggleText(entry.getKey(), entry.getValue().textResource));
     }
 
     private void setToggleText(ToggleButton button, int textResource) {
@@ -72,6 +66,11 @@ public class WeekdayPicker extends LinearLayout {
             b |= ((entry.getKey().isChecked() ? 0xFF : 0x00) & entry.getValue().bitMask);
         }
         return b;
+    }
+
+    public void setSelected(byte b) {
+        Arrays.stream(Weekday.values()).map(dayMap).forEach(entry ->
+                entry.getKey().setChecked((b & entry.getValue().bitMask) > 0));
     }
 
     public void select(Weekday... weekdays) {

@@ -12,9 +12,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         WeekdayPicker weekdayPicker = findViewById(R.id.weekday_picker);
-        weekdayPicker.setOnClickListener((view, weekday, selected) -> {
-            Log.d("WeekdayPickerApp TAG", "Click: " + weekday.name() + " , selected: " + selected +
-                    " , overall selected: " + weekdayPicker.getSelected());
-        });
+        weekdayPicker.setOnClickListener((view, weekday, selected) ->
+                Log.d("WeekdayPickerApp TAG", "Click: " + weekday.name() + " , selected: " + selected +
+                " , overall selected: " + weekdayPicker.getSelected()));
     }
 }
