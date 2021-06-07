@@ -6,6 +6,7 @@
         <item name="android:layout_weight">0.9</item>
         <item name="android:maxLines">1</item>
         <item name="android:background">@drawable/drawable_background_toggle</item>
+        <item name="android:textColor">@color/color_text_toggle</item>
     </style>
     <style name="WeekdaySpace">
         <item name="android:layout_weight">0.1</item>
