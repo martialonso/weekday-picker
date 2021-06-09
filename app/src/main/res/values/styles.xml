@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="WeekdayPickerStyle">
-        <!--<item name="android:textSize">14sp</item>-->
+        <item name="buttonMaxWidth">48dp</item>
     </style>
 </resources>

@@ -1,37 +1,46 @@
 package me.martiii.weekdaypicker;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Queue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class WeekdayPicker extends LinearLayout {
-    private final ToggleButton[] buttons = new ToggleButton[7];
-    private Function<Weekday, Map.Entry<ToggleButton, Weekday>> dayMap;
+    private final SquareToggleButton[] buttons = new SquareToggleButton[7];
+    private Function<Weekday, Map.Entry<SquareToggleButton, Weekday>> dayMap;
+    private int buttonMaxWidth;
 
     public WeekdayPicker(Context context) {
         super(context);
-        init(context);
+        init(context, null, 0);
     }
 
     public WeekdayPicker(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context, attrs, 0);
     }
 
     public WeekdayPicker(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context, attrs, defStyleAttr);
     }
 
-    private void init(Context context) {
+    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        TypedArray typedArray = context.getTheme().obtainStyledAttributes(attrs,
+                R.styleable.WeekdayPicker, defStyleAttr, 0);
+        buttonMaxWidth = typedArray.getDimensionPixelSize(R.styleable.WeekdayPicker_buttonMaxWidth,
+                getResources().getDimensionPixelSize(R.dimen.toggle_max_width));
+
         inflate(context, R.layout.layout_weekday_picker, this);
 
         buttons[0] = findViewById(R.id.toggle0);
@@ -44,8 +53,10 @@ public class WeekdayPicker extends LinearLayout {
 
         setDayMap(MONDAY_FIRST_DAY_MAP);
 
-        Arrays.stream(Weekday.values()).map(dayMap).forEach(entry ->
-                setToggleText(entry.getKey(), entry.getValue().textResource));
+        Arrays.stream(Weekday.values()).map(dayMap).forEach(entry -> {
+            setToggleText(entry.getKey(), entry.getValue().textResource);
+            entry.getKey().setMaxWidth(buttonMaxWidth);
+        });
     }
 
     private void setToggleText(ToggleButton button, int textResource) {
@@ -62,7 +73,7 @@ public class WeekdayPicker extends LinearLayout {
     //Encoded in bits 0-6
     public byte getSelected() {
         byte b = 0x00;
-        for (Map.Entry<ToggleButton, Weekday> entry : Arrays.stream(Weekday.values()).map(dayMap).collect(Collectors.toSet())) {
+        for (Map.Entry<SquareToggleButton, Weekday> entry : Arrays.stream(Weekday.values()).map(dayMap).collect(Collectors.toSet())) {
             b |= ((entry.getKey().isChecked() ? 0xFF : 0x00) & entry.getValue().bitMask);
         }
         return b;
@@ -88,7 +99,7 @@ public class WeekdayPicker extends LinearLayout {
     public void setOnClickListener(OnClickListener onClickListener) {
         Arrays.stream(Weekday.values()).map(dayMap).forEach(entry ->
                 entry.getKey().setOnClickListener(onClickListener == null ? null : v ->
-                onClickListener.onClick(this, entry.getValue(), entry.getKey().isChecked())));
+                        onClickListener.onClick(this, entry.getValue(), entry.getKey().isChecked())));
     }
 
     public enum Weekday {
@@ -115,26 +126,40 @@ public class WeekdayPicker extends LinearLayout {
 
     public static final Function<Weekday, Map.Entry<Integer, Weekday>> MONDAY_FIRST_DAY_MAP = value -> {
         switch (value) {
-            case MONDAY: return getEntry(0, value);
-            case TUESDAY: return getEntry(1, value);
-            case WEDNESDAY: return getEntry(2, value);
-            case THURSDAY: return getEntry(3, value);
-            case FRIDAY: return getEntry(4, value);
-            case SATURDAY: return getEntry(5, value);
-            case SUNDAY: return getEntry(6, value);
+            case MONDAY:
+                return getEntry(0, value);
+            case TUESDAY:
+                return getEntry(1, value);
+            case WEDNESDAY:
+                return getEntry(2, value);
+            case THURSDAY:
+                return getEntry(3, value);
+            case FRIDAY:
+                return getEntry(4, value);
+            case SATURDAY:
+                return getEntry(5, value);
+            case SUNDAY:
+                return getEntry(6, value);
         }
         return null;
     };
 
     public static final Function<Weekday, Map.Entry<Integer, Weekday>> SUNDAY_FIRST_DAY_MAP = value -> {
         switch (value) {
-            case SUNDAY: return getEntry(0, value);
-            case MONDAY: return getEntry(1, value);
-            case TUESDAY: return getEntry(2, value);
-            case WEDNESDAY: return getEntry(3, value);
-            case THURSDAY: return getEntry(4, value);
-            case FRIDAY: return getEntry(5, value);
-            case SATURDAY: return getEntry(6, value);
+            case SUNDAY:
+                return getEntry(0, value);
+            case MONDAY:
+                return getEntry(1, value);
+            case TUESDAY:
+                return getEntry(2, value);
+            case WEDNESDAY:
+                return getEntry(3, value);
+            case THURSDAY:
+                return getEntry(4, value);
+            case FRIDAY:
+                return getEntry(5, value);
+            case SATURDAY:
+                return getEntry(6, value);
         }
         return null;
     };
